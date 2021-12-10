@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StoreActor extends AbstractActor {
-    private Map<String, TestInformation> storage = new HashMap<>();
+    private Map<String, Integer> storage = new HashMap<>();
 
     @Override
     public Receive createReceive(){
@@ -31,8 +31,8 @@ public class StoreActor extends AbstractActor {
     };
 
     private Map<String, String> getResult(String packageID) {
-        TestInformation  testResults = storage.get(packageID);
-        Map<String, String>  result = new HashMap<>();
+        Integer  requestNumber = storage.get(packageID);
+        Pair<String, Integer>  result = new  Pair<>(packageID, requestNumber);
 
         return result;
     }
