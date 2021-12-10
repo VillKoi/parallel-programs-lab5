@@ -43,14 +43,14 @@ public class ActorRouter {
                     Integer requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
                     Pair<String, Integer> startInformation = new Pair<>(url, requestNumber);
                     return startInformation;
-                }).mapAsync(10, param ->
+                }).mapAsync(10, (param) ->
                     Patterns.ask(storeActor, param, TIMEOUT).thenCompose(
                             res -> {
                                 if (res != 0) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, res));
                                 }
 
-                                Flow<Pair<String, Integer>, Integer, NotUsed> flow = Flow.<Pair<String, Integer>>.create()
+                                Flow<Pair<String, Integer>, Integer, NotUsed> flow = Flow.<Pair<String, Integer>>create()
                                         .mapConcat(pair ->
                                                 new ArrayList<>(Collections.nCopies(pair.getValue(), pair.getKey()))
                                         )
@@ -63,8 +63,11 @@ public class ActorRouter {
                                                 }
 
                                         );
-                                return Source.from(Collections.singletonList(r))
-                                        .toMat(Sink.fold(), Keep.right()).run(materializer);
+                                return Source.from(Collections.singletonList(param))
+                                        .via(flow)
+                                        .toMat(Sink.fold(), Keep.right())
+                                        .run(materializer)
+                                        .thenApply(sum -> new Pair<>(pair.getKey(), sum / pair.getValue()) );
 
                             }))
                 .map(
