@@ -57,7 +57,9 @@ public class ActorRouter {
                                         )
                                         .mapAsync(pair -> {
                                             currentTime = System.currentTimeMillis();
-
+                                                    async http client
+                                                            thenCompose
+                                                    future
                                                 }
 
                                         )
