@@ -35,14 +35,14 @@ public class ActorRouter {
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorSystem system, ActorMaterializer materializer) {
         ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
 
-        Flow.of(HttpRequest.class)
-                .map(
-                request -> {
+        return Flow.of(HttpRequest.class)
+                .map(request -> {
                     Query query = request.getUri().query();
                     String url  = query.get(URL_QUERY).toString();
                     Integer requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
                     return new Pair<>(url, requestNumber);
-                }).mapAsync(10, (param) ->
+                })
+                .mapAsync(10, (param) ->
                     Patterns.ask(storeActor, param.getKey(), TIMEOUT).thenCompose(
                             res -> {
                                 if (res != 0) {
