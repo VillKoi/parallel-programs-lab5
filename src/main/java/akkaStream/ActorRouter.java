@@ -16,6 +16,8 @@ import akka.stream.javadsl.Flow;
 import scala.concurrent.Future;
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+
 import javafx.util.Pair;
 
 import static akka.http.javadsl.server.Directives.*;
@@ -29,7 +31,8 @@ public class ActorRouter {
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorSystem system, ActorMaterializer materializer) {
         ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
 
-        Flow.of(HttpRequest.class).map(
+        Flow.of(HttpRequest.class)
+                .map(
                 request -> {
                     Query query = request.getUri().query();
                     String url  = query.get(URL_QUERY).toString();
@@ -40,12 +43,15 @@ public class ActorRouter {
                     Patterns.ask(storeActor, param).thenCompose(
                             res -> {
                                 if (res != 0) {
-                                    return CompletableFuture.completedFuture()
+                                    return CompletableFuture.completedFuture(new Pair<>(param, res));
                                 }
 
-                            }
-                    )
-        })
+                                Flow.<Pair<String, Integer>>create()
+
+
+                            })
+        }).map(
+
         )
     }
 }
