@@ -1,2 +1,5 @@
-package akkaStream;public class TestInformation {
+package akkaStream;
+
+public class TestInformation {
+    
 }
