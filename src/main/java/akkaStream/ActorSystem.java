@@ -12,8 +12,10 @@ public class ActorSystem extends AbstractActor {
     public Receive createReceive(){
         return receiveBuilder(
         ).match(
+                // результат тестирования
                 TestInformation.class, this::setTestResult
         ).match(
+                // поиск результата
                 String.class, packageID -> {
                     sender().tell(getResult(packageID), self());
                 }
