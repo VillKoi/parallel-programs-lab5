@@ -14,7 +14,7 @@ public class StoreActor extends AbstractActor {
         ).match(
                 // результат тестирования
                 TestInformation.class, this::setTestResult
-                
+
         ).match(
                 // поиск результата
                 String.class, url -> {
