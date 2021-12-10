@@ -16,6 +16,9 @@ import akka.http.javadsl.model.HttpResponse;
 import akka.stream.javadsl.Flow;
 
 public class AkkaStreamApp {
+    private final static String HOST = "localhost";
+    private final static int PORT = 8080;
+
     public static void main(String[] args) throws IOException {
         System.out.println("start!");
         ActorSystem system = ActorSystem.create("routes");
@@ -27,7 +30,7 @@ public class AkkaStreamApp {
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = router.flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
-                ConnectHttp.toHost("localhost", 8080),
+                ConnectHttp.toHost(HOST, PORT),
                 materializer
         );
         System.out.println("Server online at http://localhost:8080/\nPress RETURN to stop...");

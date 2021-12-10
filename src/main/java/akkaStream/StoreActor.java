@@ -30,9 +30,9 @@ public class StoreActor extends AbstractActor {
         storage.get(testResult.getPackageID()).put(testResult.getTestName(), testResult);
     };
 
-    private Map<String, String> getResult(String packageID) {
-        Integer  requestNumber = storage.get(packageID);
-        Pair<String, Integer>  result = new  Pair<>(packageID, requestNumber);
+    private  Pair<String, Integer> getResult(String url) {
+        Integer  requestNumber = storage.get(url);
+        Pair<String, Integer>  result = new Pair<>(url, requestNumber);
 
         return result;
     }
