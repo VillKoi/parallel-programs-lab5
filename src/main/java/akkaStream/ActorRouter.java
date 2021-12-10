@@ -48,10 +48,10 @@ public class ActorRouter {
                 request -> {
                     Query query = request.getUri().query();
                     String url  = query.get(URL_QUERY).toString();
-                    int requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
-                    
+                    Integer requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
+                    Pair<String, Integer> = new Pair<>(url, requestNumber);
 
-                }
+                }).mapAsync()
         )
     }
 }
