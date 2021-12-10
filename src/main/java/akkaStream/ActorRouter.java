@@ -40,7 +40,7 @@ public class ActorRouter {
                     Integer requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
                     Pair<String, Integer> startInformation = new Pair<>(url, requestNumber);
                     return startInformation;
-                }).mapAsync(10, param -> {
+                }).mapAsync(10, param ->
                     Patterns.ask(storeActor, param).thenCompose(
                             res -> {
                                 if (res != 0) {
@@ -63,9 +63,8 @@ public class ActorRouter {
                                 return Source.from(Collections.singletonList(r))
                                         .toMat(Sink.fold(), Keep.right()).run(materializer);
 
-
-                            });
-        }).map(
+                            }))
+                .map(
 
         );
     }
