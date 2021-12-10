@@ -39,6 +39,9 @@ public class ActorRouter {
                 }).mapAsync(10, param -> {
                     Patterns.ask(storeActor, param).thenCompose(
                             res -> {
+                                if (res != 0) {
+                                    return completedFuture()
+                                }
 
                             }
                     )
