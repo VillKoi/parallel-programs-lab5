@@ -57,7 +57,7 @@ public class ActorRouter {
                     Pair<String, Integer> startInformation = new Pair<>(url, requestNumber);
                     return startInformation;
                 }).mapAsync(10, param -> {
-                    Patterns.ask(storeActor, )
+                    Patterns.ask(storeActor, param).thenCompose()
         })
         )
     }
