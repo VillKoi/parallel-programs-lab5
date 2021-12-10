@@ -1,7 +1,9 @@
 package akkaStream;
 
 import akka.NotUsed;
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.Props;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
@@ -45,7 +47,7 @@ public class ActorRouter {
     }
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorSystem system, ActorMaterializer materializer) {
-        
+        ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
 
         Flow.of(HttpRequest.class).map(
                 request -> {
@@ -55,7 +57,7 @@ public class ActorRouter {
                     Pair<String, Integer> startInformation = new Pair<>(url, requestNumber);
                     return startInformation;
                 }).mapAsync(10, param -> {
-                    Patterns.ask()
+                    Patterns.ask(storeActor, )
         })
         )
     }
