@@ -15,9 +15,12 @@ import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
+import akka.stream.javadsl.Source;
 import scala.concurrent.Future;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 import javafx.util.Pair;
@@ -49,14 +52,22 @@ public class ActorRouter {
                                 }
 
                                 Flow.<Pair<String, Integer>>.create()
-                                        .mapConcat()
-                                        .mapAsync()
-                                        .toMat(Sink.fold(), Keep.right())
+                                        .mapConcat(pair ->
+                                                new ArrayList<>(Collections.nCopies(pair))
+                                        )
+                                        .mapAsync(pair -> {
+                                            currentTime = System.currentTimeMillis();
+
+                                                }
+
+                                        )
+                                return Source.from(Collections.singletonList(r))
+                                        .toMat(Sink.fold(), Keep.right()).run(materializer);
 
 
-                            })
+                            });
         }).map(
 
-        )
+        );
     }
 }
