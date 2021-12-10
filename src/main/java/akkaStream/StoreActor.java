@@ -13,11 +13,9 @@ public class StoreActor extends AbstractActor {
     public Receive createReceive(){
         return receiveBuilder(
         ).match(
-                // результат тестирования
                 TestInformation.class, this::setTestResult
 
         ).match(
-                // поиск результата
                 String.class, url -> {
                     sender().tell(getResult(url), self());
                 }
@@ -25,14 +23,7 @@ public class StoreActor extends AbstractActor {
     }
 
     private void setTestResult(TestInformation testResult) {
-        if (!storage.containsKey(testResult.getPackageID())) {
-            storage.put(testResult.getPackageID(), new HashMap<>());
-        }
-
-        storage.putIfAbsent()
-
-
-        storage.put(testResult.getTestName(), testResult);
+        storage.putIfAbsent(testResult.getUrl(), testResult.getRequestNumber());
     };
 
     private  Pair<String, Integer> getResult(String url) {
