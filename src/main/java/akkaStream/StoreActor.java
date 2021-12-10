@@ -33,7 +33,7 @@ public class StoreActor extends AbstractActor {
     private Map<String, String> getResult(String packageID) {
         TestInformation  testResults = storage.get(packageID);
         Map<String, String>  result = new HashMap<>();
-        
+
         return result;
     }
 }
