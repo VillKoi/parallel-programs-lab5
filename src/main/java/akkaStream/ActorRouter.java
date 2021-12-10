@@ -40,7 +40,7 @@ public class ActorRouter {
                     Patterns.ask(storeActor, param).thenCompose(
                             res -> {
                                 if (res != 0) {
-                                    return completedFuture()
+                                    return CompletableFuture.completedFuture()
                                 }
 
                             }
