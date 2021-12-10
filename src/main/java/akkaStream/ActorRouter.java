@@ -13,7 +13,7 @@ import akka.stream.javadsl.Flow;
 import scala.concurrent.Future;
 
 import java.util.ArrayList;
-import java.util.Queue;
+import javafx.util.Pair;
 
 import static akka.http.javadsl.server.Directives.*;
 
@@ -51,7 +51,7 @@ public class ActorRouter {
                     Integer requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
                     Pair<String, Integer> = new Pair<>(url, requestNumber);
 
-                }).mapAsync()
+                }).mapAsync(10, )
         )
     }
 }
