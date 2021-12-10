@@ -46,7 +46,9 @@ public class ActorRouter {
                                     return CompletableFuture.completedFuture(new Pair<>(param, res));
                                 }
 
-                                Flow.<Pair<String, Integer>>create()
+                                Flow.<Pair<String, Integer>>.create()
+                                        .mapConcat()
+                                        .mapAsync()
 
 
                             })
