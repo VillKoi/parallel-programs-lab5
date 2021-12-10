@@ -1,4 +1,4 @@
-package main.java.akkaStream;
+package akkaStream;
 
 import java.io.IOException;
 
