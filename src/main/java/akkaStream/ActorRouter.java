@@ -4,12 +4,9 @@ import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.Query;
-import akka.http.javadsl.model.StatusCodes;
-import akka.http.javadsl.server.Route;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
@@ -19,13 +16,12 @@ import akka.stream.javadsl.Source;
 import scala.concurrent.Future;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 import javafx.util.Pair;
 
-import static akka.http.javadsl.server.Directives.*;
+import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public class ActorRouter {
 
@@ -56,10 +52,11 @@ public class ActorRouter {
                                                 new ArrayList<>(Collections.nCopies(pair))
                                         )
                                         .mapAsync(pair -> {
-                                            currentTime = System.currentTimeMillis();
-                                                    asyncHttpClient()
+                                            long startTime = System.currentTimeMillis();
+                                                    asyncHttpClient().prepareGet(pair.getKey()).execute();
+                                            long endTime = System.currentTimeMillis();
 
-                                                    future
+                                            return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
                                                 }
 
                                         )
