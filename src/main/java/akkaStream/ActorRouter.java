@@ -25,26 +25,6 @@ public class ActorRouter {
     private static final String URL_QUERY = "url";
     private static final String REQUEST_NUMBER_QUERY = "url";
 
-    public Route createRouter() {
-        return route(
-                get(() -> concat(
-                        path(RESULT_PATH_, () -> parameter(RESULT_QUERY, key -> {
-                            Future<Object> res = Patterns.ask(storeActor, key, TIMEOUT);
-                            return completeOKWithFuture(res, Jackson.marshaller());
-                        }))
-                )),
-                post(() -> concat(
-                        path(TEST_RUN_PATH, ()->
-                                entity(
-                                        Jackson.unmarshaller(TestInputData.class), body ->  {
-                                            ArrayList<TestInformation> tests = body.GetTests();
-                                            for (TestInformation t: tests) {
-                                                testActor.tell(t, storeActor);
-                                            }
-                                            return complete(StatusCodes.OK);
-                                        })))
-                ));
-    }
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorSystem system, ActorMaterializer materializer) {
         ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));

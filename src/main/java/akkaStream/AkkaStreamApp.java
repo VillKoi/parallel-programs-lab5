@@ -23,7 +23,7 @@ public class AkkaStreamApp {
         System.out.println("start!");
         ActorSystem system = ActorSystem.create("routes");
 
-        Route router = new ActorRouter().createRouter();
+        ActorRouter router = new ActorRouter();
         
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
