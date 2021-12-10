@@ -13,6 +13,7 @@ import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import jdk.internal.net.http.common.Pair;
 import scala.concurrent.Future;
 
 import java.util.ArrayList;
@@ -49,9 +50,9 @@ public class ActorRouter {
                                     return CompletableFuture.completedFuture(new Pair<>(param, res));
                                 }
 
-                                Flow.<Pair<String, Integer>>.create()
+                                Flow<Pair<String, Integer>, Integer, NotUsed> flow = Flow.<Pair<String, Integer>>.create()
                                         .mapConcat(pair ->
-                                                new ArrayList<>(Collections.nCopies(pair))
+                                                new ArrayList<>(Collections.nCopies(pair.getValue(), pair.getKey()))
                                         )
                                         .mapAsync(pair -> {
                                             long startTime = System.currentTimeMillis();
@@ -61,7 +62,7 @@ public class ActorRouter {
                                             return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
                                                 }
 
-                                        )
+                                        );
                                 return Source.from(Collections.singletonList(r))
                                         .toMat(Sink.fold(), Keep.right()).run(materializer);
 
