@@ -28,6 +28,8 @@ public class ActorRouter {
     private static final String URL_QUERY = "url";
     private static final String REQUEST_NUMBER_QUERY = "url";
 
+    private final static int TIMEOUT = 5000;
+
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorSystem system, ActorMaterializer materializer) {
         ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
@@ -41,7 +43,7 @@ public class ActorRouter {
                     Pair<String, Integer> startInformation = new Pair<>(url, requestNumber);
                     return startInformation;
                 }).mapAsync(10, param ->
-                    Patterns.ask(storeActor, param).thenCompose(
+                    Patterns.ask(storeActor, param, TIMEOUT).thenCompose(
                             res -> {
                                 if (res != 0) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, res));
