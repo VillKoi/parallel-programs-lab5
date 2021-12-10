@@ -13,6 +13,7 @@ import akka.http.javadsl.server.Route;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import akka.stream.javadsl.Keep;
 import scala.concurrent.Future;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class ActorRouter {
                                 Flow.<Pair<String, Integer>>.create()
                                         .mapConcat()
                                         .mapAsync()
+                                        .toMat(fold, Keep.right()
 
 
                             })
