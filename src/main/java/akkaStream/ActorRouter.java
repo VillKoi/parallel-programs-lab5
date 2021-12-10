@@ -1,2 +1,11 @@
-package akkaStream;public class ActorRouter {
+package akkaStream;
+
+import akka.http.javadsl.server.Route;
+
+public class ActorRouter {
+
+
+    public Route createRouter() {
+
+    }
 }
