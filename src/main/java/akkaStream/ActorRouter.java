@@ -1,6 +1,7 @@
 package akkaStream;
 
 import akka.NotUsed;
+import akka.actor.ActorSystem;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
@@ -43,7 +44,9 @@ public class ActorRouter {
                 ));
     }
 
-    public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer) {
+    public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorSystem system, ActorMaterializer materializer) {
+        
+
         Flow.of(HttpRequest.class).map(
                 request -> {
                     Query query = request.getUri().query();
