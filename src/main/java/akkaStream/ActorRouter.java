@@ -41,10 +41,9 @@ public class ActorRouter {
                     Query query = request.getUri().query();
                     String url  = query.get(URL_QUERY).toString();
                     Integer requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
-                    Pair<String, Integer> startInformation = new Pair<>(url, requestNumber);
-                    return startInformation;
+                    return new Pair<>(url, requestNumber);
                 }).mapAsync(10, (param) ->
-                    Patterns.ask(storeActor, param, TIMEOUT).thenCompose(
+                    Patterns.ask(storeActor, param.getKey(), TIMEOUT).thenCompose(
                             res -> {
                                 if (res != 0) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, res));
