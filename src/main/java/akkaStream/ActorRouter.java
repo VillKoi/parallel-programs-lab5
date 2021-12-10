@@ -4,6 +4,7 @@ import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.http.javadsl.model.HttpEntities;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.Query;
@@ -13,7 +14,6 @@ import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
-import jdk.internal.net.http.common.Pair;
 import scala.concurrent.Future;
 
 import java.util.ArrayList;
@@ -69,7 +69,9 @@ public class ActorRouter {
                                         .thenApply(sum -> new Pair<>(pair.getKey(), sum / pair.getValue()) );
 
                             }))
-                .map(
+                .map((Pair<String, Integer> pair) -> {
+                    return HttpResponse.create().withEntity(HttpEntities.create(pair.getValue().toString()))
+                }
 
         );
     }
