@@ -3,7 +3,7 @@ package akkaStream;
 public class TestInformation {
     private String url;
     private Integer requestNumber;
-    private Integer time;
+    private long time;
 
     public String getUrl() {
         return url;
@@ -16,6 +16,12 @@ public class TestInformation {
     public TestInformation(String url, Integer con) {
         this.url = url;
         this.requestNumber = con;
+    }
+
+    public TestInformation(String url, Integer con, long time) {
+        this.url = url;
+        this.requestNumber = con;
+        this.time = time;
     }
 
     public TestInformation add(TestInformation information) {

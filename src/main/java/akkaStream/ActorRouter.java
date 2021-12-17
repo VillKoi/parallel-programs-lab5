@@ -71,14 +71,15 @@ public class ActorRouter {
                 .mapConcat(pair ->
                         new ArrayList<>(Collections.nCopies(pair.second(), pair))
                 )
-                .mapAsync(param -> {
+                .mapAsync(10, param -> {
                             long startTime = System.currentTimeMillis();
                             asyncHttpClient().prepareGet(param.first()).execute();
                             long endTime = System.currentTimeMillis();
 
-                            return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
+                            return CompletableFuture.completedFuture(new TestInformation(param.first(), 0,endTime - startTime));
                         }
-                ).fold(new TestInformation("", 0),(res, element) -> res.add((TestInformation) element)
+                ).fold(new TestInformation("", 0),(res, element) ->
+                       res.add((TestInformation) element)
                 ).map(param -> {
                    storeActor.tell(param, ActorRef.noSender());
                    return param;
