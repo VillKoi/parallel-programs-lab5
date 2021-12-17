@@ -1,7 +1,6 @@
 package akkaStream;
 
 import akka.actor.AbstractActor;
-import jdk.internal.net.http.common.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +26,9 @@ public class StoreActor extends AbstractActor {
         storage.putIfAbsent(testResult.getUrl(), time);
     };
 
-    private  TestResult getResult(TestInformation information) {
-        Pair<String, Integer> output = new Pair<>(information.getUrl(), information.getRequestNumber());
-        return output;
+    private TestResult getResult(TestInformation information) {
+        long  requestTime = storage.get(information.getUrl());
+        TestResult result = new TestResult(information.getUrl(), information.getRequestNumber(), requestTime);
+        return result;
     }
 }
