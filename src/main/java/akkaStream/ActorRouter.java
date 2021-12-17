@@ -42,7 +42,7 @@ public class ActorRouter {
                     return new Pair<>(url, requestNumber);
                 })
                 .mapAsync(10, (param) -> {
-                    Patterns.ask(storeActor, param.first(), TIMEOUT)
+                   return Patterns.ask(storeActor, param.first(), TIMEOUT)
                             .thenCompose(response -> {
                                 if ((int) response != 0) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, response));
@@ -67,9 +67,8 @@ public class ActorRouter {
                                         .run(materializer)
                                         .thenApply(sum -> new Pair<>(pair.getKey(), sum / pair.getValue()));
 
-                            })
-                })
-                .map(param -> {
+                            });
+                }).map(param -> {
                     return HttpResponse.create().withEntity(HttpEntities.create(param.toString()));
                 }
         );
