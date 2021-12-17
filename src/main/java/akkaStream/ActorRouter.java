@@ -52,7 +52,7 @@ public class ActorRouter {
                                     return CompletableFuture.completedFuture(new Pair<>(param, result));
                                 }
 
-                                Sink testSink = createFlow();
+                                Sink<Pair<String, Integer>, CompletionStage<TestResult>> testSink = createFlow();
                                 return Source.from(Collections.singletonList(param))
                                         .toMat(testSink, Keep.right())
                                         .run(materializer);
