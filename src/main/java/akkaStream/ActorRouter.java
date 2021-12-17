@@ -69,11 +69,11 @@ public class ActorRouter {
     private Sink<Pair<String, Integer>, CompletionStage<Long>> createFlow(){
        return Flow.<Pair<String, Integer>>create()
                 .mapConcat(pair ->
-                        new ArrayList<>(Collections.nCopies(pair.second(), pair.first()))
+                        new ArrayList<>(Collections.nCopies(pair.second(), pair))
                 )
                 .mapAsync(param -> {
                             long startTime = System.currentTimeMillis();
-                            asyncHttpClient().prepareGet(pair.first()).execute();
+                            asyncHttpClient().prepareGet(param.first()).execute();
                             long endTime = System.currentTimeMillis();
 
                             return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
