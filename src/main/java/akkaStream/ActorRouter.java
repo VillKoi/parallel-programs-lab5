@@ -2,8 +2,6 @@ package akkaStream;
 
 import akka.NotUsed;
 import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
-import akka.actor.Props;
 import akka.http.javadsl.model.HttpEntities;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
@@ -18,7 +16,6 @@ import akka.stream.javadsl.Source;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import scala.concurrent.Future;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,7 +62,7 @@ public class ActorRouter {
                 });
     }
 
-    private Sink<Pair<String, Integer>, CompletionStage<Long>> createFlow(){
+    private Sink<Pair<String, Integer>, CompletionStage<TestResult>> createFlow(){
        return Flow.<Pair<String, Integer>>create()
                 .mapConcat(pair ->
                         new ArrayList<>(Collections.nCopies(pair.second(), pair))
