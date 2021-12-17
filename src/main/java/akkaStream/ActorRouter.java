@@ -73,6 +73,8 @@ public class ActorRouter {
 
                             return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
                         }
-                ).toMat(fold, Keep.right());
+                ).fold(
+
+               ).toMat(Sink.fold(), Keep.right());
     }
 }
