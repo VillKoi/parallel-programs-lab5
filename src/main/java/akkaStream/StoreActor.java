@@ -16,8 +16,8 @@ public class StoreActor extends AbstractActor {
                 TestInformation.class, this::setTestResult
 
         ).match(
-                String.class, url -> {
-                    sender().tell(getResult(url), self());
+                TestResult.class, result -> {
+                    sender().tell(getResult(result), self());
                 }
         ).build();
     }
@@ -26,10 +26,9 @@ public class StoreActor extends AbstractActor {
         storage.putIfAbsent(testResult.getUrl(), testResult.getRequestNumber());
     };
 
-    private  Pair<String, Integer> getResult(String url) {
-        Integer  requestNumber = storage.get(url);
-        Pair<String, Integer> result = new Pair<>(url, requestNumber);
-
-        return result;
+    private  Pair<String, Integer> getResult(TestResult result) {
+        long  requestTime = storage.get(result.getUrl());
+        Pair<String, Integer> output = new Pair<>(result.getUrl(), requestTime);
+        return output;
     }
 }
