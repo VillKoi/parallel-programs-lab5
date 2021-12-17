@@ -37,9 +37,7 @@ public class ActorRouter {
     private final static int TIMEOUT = 5000;
 
 
-    public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorSystem system, ActorMaterializer materializer) {
-        ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
-
+    public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer) {
         return Flow.of(HttpRequest.class)
                 .map(request -> {
                     Query query = request.getUri().query();
@@ -51,8 +49,7 @@ public class ActorRouter {
                     TestInformation information = new TestInformation(param.first(), param.second());
                    return Patterns.ask(storeActor, information, TIMEOUT)
                             .thenCompose(response -> {
-
-                                if ((int) response.second() != 0) {
+                                if (response.isReady()) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, response));
                                 }
 

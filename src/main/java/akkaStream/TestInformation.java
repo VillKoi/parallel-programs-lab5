@@ -28,4 +28,8 @@ public class TestInformation {
         this.requestNumber += information.requestNumber;
         this.time += information.time;
     }
+
+    public boolean isReady() {
+        return time != 0;
+    }
 }
