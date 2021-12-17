@@ -65,7 +65,7 @@ public class ActorRouter {
         );
     }
 
-    private Flow<Pair<String, Integer>, Integer, NotUsed> createFlow(){
+    private Sink<Pair<String, Integer>, Integer, NotUsed> createFlow(){
        return Flow.<Pair<String, Integer>>create()
                 .mapConcat(pair ->
                         new ArrayList<>(Collections.nCopies(pair.second(), pair.first()))
