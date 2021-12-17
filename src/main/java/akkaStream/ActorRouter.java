@@ -41,7 +41,7 @@ public class ActorRouter {
                     Integer requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
                     return new Pair<>(url, requestNumber);
                 })
-                .mapAsync(10, (param) -> {
+                .mapAsync(10, param -> {
                    return Patterns.ask(storeActor, param.first(), TIMEOUT)
                             .thenCompose(response -> {
 
