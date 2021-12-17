@@ -44,7 +44,8 @@ public class ActorRouter {
                 .mapAsync(10, (param) -> {
                    return Patterns.ask(storeActor, param.first(), TIMEOUT)
                             .thenCompose(response -> {
-                                if ((int) response != 0) {
+                                
+                                if ((int) response.second() != 0) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, response));
                                 }
 
