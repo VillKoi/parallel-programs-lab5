@@ -48,7 +48,7 @@ public class ActorRouter {
                     return Patterns.ask(storeActor, information, TIMEOUT)
                             .thenCompose(response -> {
                                 Optional<TestResult> result = (Optional<TestResult>) response;
-                                if (result.isReady()) {
+                                if (result.isPresent()) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, result));
                                 }
 
@@ -57,9 +57,9 @@ public class ActorRouter {
                                         .toMat(testSink, Keep.right())
                                         .run(materializer);
                             });
-                }).map(param -> {
+                }).map(param ->
                     HttpResponse.create().withEntity(HttpEntities.create(param.toString()));
-                });
+                );
     }
 
     private Sink<Pair<String, Integer>, CompletionStage<TestResult>> createFlow(){
