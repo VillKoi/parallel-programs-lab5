@@ -36,7 +36,6 @@ public class ActorRouter {
 
     private final static int TIMEOUT = 5000;
 
-
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer) {
         return Flow.of(HttpRequest.class)
                 .map(request -> {
@@ -47,7 +46,7 @@ public class ActorRouter {
                 })
                 .mapAsync(10, param -> {
                     TestInformation information = new TestInformation(param.first(), param.second());
-                   return Patterns.ask(storeActor, information, TIMEOUT)
+                    return Patterns.ask(storeActor, information, TIMEOUT)
                             .thenCompose(response -> {
                                 if (response.isReady()) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, response));
