@@ -15,6 +15,8 @@ import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import scala.concurrent.Future;
 
@@ -48,8 +50,9 @@ public class ActorRouter {
                     TestInformation information = new TestInformation(param.first(), param.second());
                     return Patterns.ask(storeActor, information, TIMEOUT)
                             .thenCompose(response -> {
-                                if (response.isReady()) {
-                                    return CompletableFuture.completedFuture(new Pair<>(param, response));
+                                Optional<TestResult> result = (Optional<TestResult>) response;
+                                if (result.isReady()) {
+                                    return CompletableFuture.completedFuture(new Pair<>(param, result));
                                 }
 
                                 Sink testSink = createFlow();
