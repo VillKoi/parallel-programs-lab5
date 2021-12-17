@@ -8,6 +8,7 @@ import akka.http.javadsl.model.HttpEntities;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.Query;
+import akka.japi.Pair;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
@@ -19,8 +20,6 @@ import scala.concurrent.Future;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
-
-import javafx.util.Pair;
 
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
@@ -43,7 +42,7 @@ public class ActorRouter {
                     return new Pair<>(url, requestNumber);
                 })
                 .mapAsync(10, (param) ->
-                    Patterns.ask(storeActor, param.getKey(), TIMEOUT)
+                    Patterns.ask(storeActor, param.first(), TIMEOUT)
                             .thenCompose(res -> {
                                 if ((int)res != 0) {
                                     return CompletableFuture.completedFuture(new Pair<>(param, res));
@@ -51,11 +50,11 @@ public class ActorRouter {
 
                                 Flow<Pair<String, Integer>, Integer, NotUsed> flow = Flow.<Pair<String, Integer>>create()
                                         .mapConcat(pair ->
-                                                new ArrayList<>(Collections.nCopies(pair.getValue(), pair.getKey()))
+                                                new ArrayList<>(Collections.nCopies(pair.second(), pair.first()))
                                         )
                                         .mapAsync(pair -> {
                                             long startTime = System.currentTimeMillis();
-                                                    asyncHttpClient().prepareGet(pair.getKey()).execute();
+                                                    asyncHttpClient().prepareGet(pair.first()).execute();
                                             long endTime = System.currentTimeMillis();
 
                                             return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
@@ -70,7 +69,7 @@ public class ActorRouter {
 
                             }))
                 .map((Pair<String, Integer> pair) -> {
-                    return HttpResponse.create().withEntity(HttpEntities.create(pair.getValue().toString()))
+                    return HttpResponse.create().withEntity(HttpEntities.create(pair.second().toString()));
                 }
 
         );
