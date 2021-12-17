@@ -59,7 +59,6 @@ public class ActorRouter {
 
                                             return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
                                                 }
-
                                         );
 
                                 Sink sink = Sink.fold();
