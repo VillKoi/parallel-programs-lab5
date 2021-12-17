@@ -61,7 +61,7 @@ public class ActorRouter {
                                                 }
                                         );
 
-                                Sink sink = Sink.fold();
+                                Sink sink = Sink.fold(0, Integer::sum);
                                 return Source.from(Collections.singletonList(param))
                                         .via(flow)
                                         .toMat(sink, Keep.right())
