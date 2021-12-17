@@ -1,7 +1,6 @@
 package akkaStream;
 
 public class TestResult {
-
         private String url;
         private Integer requestNumber;
         private long time;
@@ -14,25 +13,20 @@ public class TestResult {
             return requestNumber;
         }
 
-        public TestInformation(String url, Integer con) {
-            this.url = url;
-            this.requestNumber = con;
-        }
-
-        public TestInformation(String url, Integer con, long time) {
+        public TestResult(String url, Integer con, long time) {
             this.url = url;
             this.requestNumber = con;
             this.time = time;
         }
 
-        public akkaStream.TestInformation add(akkaStream.TestInformation information) {
-            this.requestNumber += information.requestNumber;
-            this.time += information.time;
+        public TestResult add(TestResult result) {
+            this.url = result.url;
+            this.requestNumber += result.requestNumber;
+            this.time += result.time;
         }
 
         public boolean isReady() {
             return time != 0;
-        }
-    
 
+        }
 }

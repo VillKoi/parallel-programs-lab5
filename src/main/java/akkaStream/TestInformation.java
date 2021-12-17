@@ -17,19 +17,4 @@ public class TestInformation {
         this.url = url;
         this.requestNumber = con;
     }
-
-    public TestInformation(String url, Integer con, long time) {
-        this.url = url;
-        this.requestNumber = con;
-        this.time = time;
-    }
-
-    public TestInformation add(TestInformation information) {
-        this.requestNumber += information.requestNumber;
-        this.time += information.time;
-    }
-
-    public boolean isReady() {
-        return time != 0;
-    }
 }
