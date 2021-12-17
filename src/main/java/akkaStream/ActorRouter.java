@@ -75,13 +75,13 @@ public class ActorRouter {
                             asyncHttpClient().prepareGet(param.first()).execute();
                             long endTime = System.currentTimeMillis();
 
-                            return CompletableFuture.completedFuture(new TestInformation(param.first(), 0,endTime - startTime));
+                            return CompletableFuture.completedFuture(new TestResult(param.first(), 0,endTime - startTime));
                         }
-                ).fold(new TestInformation("", 0),(res, element) ->
-                       res.add((TestInformation) element)
+                ).fold(new TestResult("", 0, 0),(res, element) ->
+                       res.add(element)
                 ).map(param -> {
                    storeActor.tell(param, ActorRef.noSender());
                    return param;
-               }).toMat(Sink.fold(), Keep.right());
+               }).toMat(Sink.head(), Keep.right());
     }
 }
