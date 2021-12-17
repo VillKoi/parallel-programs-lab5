@@ -11,4 +11,9 @@ public class TestInformation {
     public Integer getRequestNumber() {
         return requestNumber;
     }
+
+    public TestInformation(String url, Integer con) {
+        this.url = url;
+        this.requestNumber = con;
+    }
 }
