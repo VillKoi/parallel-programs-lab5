@@ -71,7 +71,7 @@ public class ActorRouter {
                 .mapConcat(pair ->
                         new ArrayList<>(Collections.nCopies(pair.second(), pair.first()))
                 )
-                .mapAsync(pair -> {
+                .mapAsync(param -> {
                             long startTime = System.currentTimeMillis();
                             asyncHttpClient().prepareGet(pair.first()).execute();
                             long endTime = System.currentTimeMillis();
