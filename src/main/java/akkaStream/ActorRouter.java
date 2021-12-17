@@ -64,8 +64,8 @@ public class ActorRouter {
                                 return Source.from(Collections.singletonList(param))
                                         .via(flow)
                                         .toMat(Sink.fold(), Keep.right())
-                                        .run(materializer)
-                                        .thenApply(sum -> new Pair<>(pair.getKey(), sum / pair.getValue()));
+                                        .run(materializer);
+//                                        .thenApply(sum -> new Pair<>(pair.getKey(), sum / pair.getValue()));
 
                             });
                 }).map(param -> {
