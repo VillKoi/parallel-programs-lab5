@@ -15,6 +15,7 @@ import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import java.util.concurrent.CompletionStage;
 import scala.concurrent.Future;
 
 import java.util.ArrayList;
@@ -50,9 +51,7 @@ public class ActorRouter {
                                     return CompletableFuture.completedFuture(new Pair<>(param, response));
                                 }
 
-                                Flow<Pair<String, Integer>, Integer, NotUsed> flow = createFlow();
-
-                                Sink testSink = Sink.fold(0, Integer::sum);
+                                Sink testSink = createFlow();
                                 return Source.from(Collections.singletonList(param))
                                         .toMat(testSink, Keep.right())
                                         .run(materializer);
@@ -65,7 +64,7 @@ public class ActorRouter {
         );
     }
 
-    private Sink<Pair<String, Integer>, Integer, NotUsed> createFlow(){
+    private Sink<Pair<String, Integer>, СompletionStage<Long>> createFlow(){
        return Flow.<Pair<String, Integer>>create()
                 .mapConcat(pair ->
                         new ArrayList<>(Collections.nCopies(pair.second(), pair.first()))
