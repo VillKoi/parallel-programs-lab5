@@ -50,10 +50,9 @@ public class ActorRouter {
 
                                 Flow<Pair<String, Integer>, Integer, NotUsed> flow = createFlow();
 
-                                Sink sink = Sink.fold(0, Integer::sum);
+                                Sink testSink = Sink.fold(0, Integer::sum);
                                 return Source.from(Collections.singletonList(param))
-                                        .via(flow)
-                                        .toMat(sink, Keep.right())
+                                        .toMat(testSink, Keep.right())
                                         .run(materializer);
 //                                        .thenApply(sum -> new Pair<>(pair.getKey(), sum / pair.getValue()));
 
