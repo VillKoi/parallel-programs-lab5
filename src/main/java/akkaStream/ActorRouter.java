@@ -68,10 +68,9 @@ public class ActorRouter {
                                         .thenApply(sum -> new Pair<>(pair.getKey(), sum / pair.getValue()) );
 
                             }))
-                .map((Pair<String, Integer> pair) -> {
-                    return HttpResponse.create().withEntity(HttpEntities.create(pair.second().toString()));
+                .map(param -> {
+                    return HttpResponse.create().withEntity(HttpEntities.create(param.toString()));
                 }
-
         );
     }
 }
