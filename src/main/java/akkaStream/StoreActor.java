@@ -13,22 +13,22 @@ public class StoreActor extends AbstractActor {
     public Receive createReceive(){
         return receiveBuilder(
         ).match(
-                TestInformation.class, this::setTestResult
-
-        ).match(
-                TestResult.class, result -> {
+                TestInformation.class, result -> {
                     sender().tell(getResult(result), self());
                 }
+
+        ).match(
+                TestResult.class, this::setTestResult
         ).build();
     }
 
-    private void setTestResult(TestInformation testResult) {
-        storage.putIfAbsent(testResult.getUrl(), testResult.getRequestNumber());
+    private void setTestResult(TestResult testResult) {
+        storage.putIfAbsent(testResult.getUrl(), testResult());
     };
 
-    private  Pair<String, Integer> getResult(TestResult result) {
-        long  requestTime = storage.get(result.getUrl());
-        Pair<String, Integer> output = new Pair<>(result.getUrl(), requestTime);
+    private  Pair<String, Integer> getResult(TestInformation information) {
+        long  requestTime = storage.get(information.getUrl());
+        Pair<String, Integer> output = new Pair<>(information.getUrl(), requestTime);
         return output;
     }
 }

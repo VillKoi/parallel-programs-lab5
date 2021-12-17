@@ -13,7 +13,11 @@ public class TestResult {
             return requestNumber;
         }
 
-        public TestResult(String url, Integer con, long time) {
+    public long getTime() {
+        return time;
+    }
+
+    public TestResult(String url, Integer con, long time) {
             this.url = url;
             this.requestNumber = con;
             this.time = time;
