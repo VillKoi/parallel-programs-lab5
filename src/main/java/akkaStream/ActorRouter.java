@@ -25,6 +25,11 @@ import java.util.concurrent.CompletableFuture;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public class ActorRouter {
+    private ActorRef storeActor;
+
+    public void setStoreActor(ActorRef storeActor) {
+        this.storeActor = storeActor;
+    }
 
     private static final String URL_QUERY = "url";
     private static final String REQUEST_NUMBER_QUERY = "url";
@@ -73,10 +78,11 @@ public class ActorRouter {
 
                             return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
                         }
-                ).fold(
+                ).fold(new TestInformation("", 0), 
 
                ).map(param -> {
-
-                       }).toMat(Sink.fold(), Keep.right());
+                   storeActor.tell(param, ActorRef.noSender());
+                   return param;
+               }).toMat(Sink.fold(), Keep.right());
     }
 }
