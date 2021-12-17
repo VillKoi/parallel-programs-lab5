@@ -23,12 +23,12 @@ public class StoreActor extends AbstractActor {
     }
 
     private void setTestResult(TestResult testResult) {
-        storage.putIfAbsent(testResult.getUrl(), testResult());
+        Integer time = Math.toIntExact(testResult.getTime());
+        storage.putIfAbsent(testResult.getUrl(), time);
     };
 
-    private  Pair<String, Integer> getResult(TestInformation information) {
-        long  requestTime = storage.get(information.getUrl());
-        Pair<String, Integer> output = new Pair<>(information.getUrl(), requestTime);
+    private  TestResult getResult(TestInformation information) {
+        Pair<String, Integer> output = new Pair<>(information.getUrl(), information.getRequestNumber());
         return output;
     }
 }
