@@ -48,18 +48,7 @@ public class ActorRouter {
                                     return CompletableFuture.completedFuture(new Pair<>(param, response));
                                 }
 
-                                Flow<Pair<String, Integer>, Integer, NotUsed> flow = Flow.<Pair<String, Integer>>create()
-                                        .mapConcat(pair ->
-                                                new ArrayList<>(Collections.nCopies(pair.second(), pair.first()))
-                                        )
-                                        .mapAsync(pair -> {
-                                            long startTime = System.currentTimeMillis();
-                                                    asyncHttpClient().prepareGet(pair.first()).execute();
-                                            long endTime = System.currentTimeMillis();
-
-                                            return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
-                                                }
-                                        );
+                                Flow<Pair<String, Integer>, Integer, NotUsed> flow = createFlow();
 
                                 Sink sink = Sink.fold(0, Integer::sum);
                                 return Source.from(Collections.singletonList(param))
@@ -73,5 +62,20 @@ public class ActorRouter {
                     return HttpResponse.create().withEntity(HttpEntities.create(param.toString()));
                 }
         );
+    }
+
+    private Flow<Pair<String, Integer>, Integer, NotUsed> createFlow(){
+       return Flow.<Pair<String, Integer>>create()
+                .mapConcat(pair ->
+                        new ArrayList<>(Collections.nCopies(pair.second(), pair.first()))
+                )
+                .mapAsync(pair -> {
+                            long startTime = System.currentTimeMillis();
+                            asyncHttpClient().prepareGet(pair.first()).execute();
+                            long endTime = System.currentTimeMillis();
+
+                            return CompletableFuture.completedFuture(new Pair<>(param, endTime - startTime));
+                        }
+                );
     }
 }
