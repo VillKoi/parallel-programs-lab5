@@ -32,6 +32,5 @@ public class TestResult {
 
         public boolean isReady() {
             return time != 0;
-
         }
 }
