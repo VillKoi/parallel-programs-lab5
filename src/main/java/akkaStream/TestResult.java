@@ -20,7 +20,7 @@ public class TestResult {
         }
 
         public long getAvrTime() {
-            return requestNumber / time;
+            return time / requestNumber;
         }
 
         public TestResult(String url, Integer con, long time) {
