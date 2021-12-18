@@ -13,6 +13,7 @@ import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import org.asynchttpclient.AsyncHttpClient;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -79,7 +80,8 @@ public class ActorRouter {
                 )
                 .mapAsync(10, param -> {
                             long startTime = System.currentTimeMillis();
-                            asyncHttpClient().prepareGet(param.first()).execute();
+                            AsyncHttpClient client = asyncHttpClient();
+                            client.prepareGet(param.first()).execute();
                             long endTime = System.currentTimeMillis();
 
                             return CompletableFuture.completedFuture(new TestResult(param.first(), 0, endTime - startTime));
