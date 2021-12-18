@@ -15,6 +15,7 @@ import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 
 import java.time.Duration;
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import java.util.ArrayList;
@@ -40,10 +41,10 @@ public class ActorRouter {
         return Flow.of(HttpRequest.class)
                 .map(request -> {
                     Query query = request.getUri().query();
-                    String url  = query.get(URL_QUERY).toString();
-                    String count = query.get(REQUEST_NUMBER_QUERY).toString();
-                    Integer requestNumber = Integer.parseInt(count);
-                    return new Pair<>(url, requestNumber);
+                    Optional<String> url = query.get(URL_QUERY);
+                    Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
+                    Integer requestNumber = Integer.parseInt(count.toString());
+                    return new Pair<>(url.toString(), requestNumber);
                 })
                 .mapAsync(10, param -> {
                     TestInformation information = new TestInformation(param.first(), param.second());
@@ -60,12 +61,12 @@ public class ActorRouter {
                                         .run(materializer);
                             });
                 }).map(param ->
-                    HttpResponse.create().withEntity(HttpEntities.create(param.toString()))
+                        HttpResponse.create().withEntity(HttpEntities.create(param.toString()))
                 );
     }
 
-    private Sink<Pair<String, Integer>, CompletionStage<Long>> createFlow(){
-       return Flow.<Pair<String, Integer>>create()
+    private Sink<Pair<String, Integer>, CompletionStage<Long>> createFlow() {
+        return Flow.<Pair<String, Integer>>create()
                 .mapConcat(pair ->
                         new ArrayList<>(Collections.nCopies(pair.second(), pair))
                 )
@@ -74,13 +75,13 @@ public class ActorRouter {
                             asyncHttpClient().prepareGet(param.first()).execute();
                             long endTime = System.currentTimeMillis();
 
-                            return CompletableFuture.completedFuture(new TestResult(param.first(), 0,endTime - startTime));
+                            return CompletableFuture.completedFuture(new TestResult(param.first(), 0, endTime - startTime));
                         }
                 ).fold(new TestResult("", 0, 0), (res, element) ->
-                       res.add(element)
+                        res.add(element)
                 ).map(param -> {
-                   storeActor.tell(param, ActorRef.noSender());
-                   return param.getTime();
-               }).toMat(Sink.head(), Keep.right());
+                    storeActor.tell(param, ActorRef.noSender());
+                    return param.getTime();
+                }).toMat(Sink.head(), Keep.right());
     }
 }
