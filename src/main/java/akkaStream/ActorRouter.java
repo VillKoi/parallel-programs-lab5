@@ -52,7 +52,7 @@ public class ActorRouter {
                             .thenCompose(response -> {
                                 Optional<TestResult> result = (Optional<TestResult>) response;
                                 if (result.isPresent()) {
-                                    return CompletableFuture.completedFuture(new Pair<>(param, result));
+                                    return CompletableFuture.completedFuture(result.get().getTime());
                                 }
 
                                 Sink<Pair<String, Integer>, CompletionStage<TestResult>> testSink = createFlow();
