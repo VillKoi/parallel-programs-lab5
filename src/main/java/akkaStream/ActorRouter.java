@@ -45,16 +45,11 @@ public class ActorRouter {
                     Optional<String> url = query.get(URL_QUERY);
                     Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
 
-                    Integer requestNumber = 0;
-                    try {
-                        requestNumber = Integer.parseInt(count.get());
-                    } catch (NumberFormatException ex) {
-                        ex.printStackTrace();
-                    }
+                    Integer requestNumber = getSaveInt(count);
 
                     return new Pair<>(url.get(), requestNumber);
                 })
-                .mapAsync(1, param -> {
+                .mapAsync(4, param -> {
                     TestInformation information = new TestInformation(param.first(), param.second());
                     return Patterns.ask(storeActor, information, TIMEOUT_DURATION)
                             .thenCompose(response -> {
@@ -94,5 +89,16 @@ public class ActorRouter {
                     storeActor.tell(param, ActorRef.noSender());
                     return param.getTime();
                 }).toMat(Sink.head(), Keep.right());
+    }
+
+    private Integer getSaveInt(Optional<String> count) {
+        Integer requestNumber = 0;
+        try {
+            requestNumber = Integer.parseInt(count.get());
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+        }
+
+        return requestNumber;
     }
 }

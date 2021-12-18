@@ -28,7 +28,7 @@ public class StoreActor extends AbstractActor {
 
     private TestResult getResult(TestInformation information) {
         long requestTime = 0;
-        if (storage.containsKey(storage.containsKey(information.getUrl()))) {
+        if (storage.containsKey(information.getUrl())) {
             requestTime = storage.get(information.getUrl());
         }
         TestResult result = new TestResult(information.getUrl(), information.getRequestNumber(), requestTime);
