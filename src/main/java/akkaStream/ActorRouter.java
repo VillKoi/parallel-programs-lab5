@@ -54,7 +54,7 @@ public class ActorRouter {
 
                     return new Pair<>(url.get(), requestNumber);
                 })
-                .mapAsync(10, param -> {
+                .mapAsync(1, param -> {
                     TestInformation information = new TestInformation(param.first(), param.second());
                     return Patterns.ask(storeActor, information, TIMEOUT_DURATION)
                             .thenCompose(response -> {
