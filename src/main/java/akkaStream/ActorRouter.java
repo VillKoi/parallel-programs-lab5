@@ -41,7 +41,8 @@ public class ActorRouter {
                 .map(request -> {
                     Query query = request.getUri().query();
                     String url  = query.get(URL_QUERY).toString();
-                    Integer requestNumber = Integer.parseInt(query.get(REQUEST_NUMBER_QUERY).toString());
+                    String count = query.get(REQUEST_NUMBER_QUERY).toString();
+                    Integer requestNumber = Integer.parseInt(count);
                     return new Pair<>(url, requestNumber);
                 })
                 .mapAsync(10, param -> {
