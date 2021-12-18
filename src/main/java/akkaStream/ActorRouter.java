@@ -14,6 +14,7 @@ import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
@@ -34,7 +35,7 @@ public class ActorRouter {
     private static final String REQUEST_NUMBER_QUERY = "url";
 
     private final static int TIMEOUT = 5000;
-    private final static int TIMEOUT = 5000;
+    private final static Duration TIMEOUT_DURATION = Duration.ofMillis(TIMEOUT);
 
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer) {
@@ -47,7 +48,7 @@ public class ActorRouter {
                 })
                 .mapAsync(10, param -> {
                     TestInformation information = new TestInformation(param.first(), param.second());
-                    return Patterns.ask(storeActor, information, TIMEOUT)
+                    return Patterns.ask(storeActor, information, TIMEOUT_DURATION)
                             .thenCompose(response -> {
                                 Optional<TestResult> result = (Optional<TestResult>) response;
                                 if (result.isPresent()) {
