@@ -15,7 +15,6 @@ import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 
 import java.time.Duration;
-import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import java.util.ArrayList;
@@ -32,11 +31,10 @@ public class ActorRouter {
     }
 
     private static final String URL_QUERY = "url";
-    private static final String REQUEST_NUMBER_QUERY = "url";
+    private static final String REQUEST_NUMBER_QUERY = "count";
 
     private final static int TIMEOUT = 5000;
     private final static Duration TIMEOUT_DURATION = Duration.ofMillis(TIMEOUT);
-
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer) {
         return Flow.of(HttpRequest.class)

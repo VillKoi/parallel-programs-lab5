@@ -13,15 +13,15 @@ public class TestResult {
             return requestNumber;
         }
 
-    public long getTime() {
-        return time;
-    }
+        public long getTime() {
+            return time;
+        }
 
-    public long getAvrTime() {
-        return requestNumber / time;
-    }
+        public long getAvrTime() {
+            return requestNumber / time;
+        }
 
-    public TestResult(String url, Integer con, long time) {
+        public TestResult(String url, Integer con, long time) {
             this.url = url;
             this.requestNumber = con;
             this.time = time;
