@@ -88,7 +88,7 @@ public class ActorRouter {
 
                             return CompletableFuture.completedFuture(new TestResult(param.first(), endTime - startTime));
                         }
-                ).fold(new TestResult("", 0, 0), (res, element) ->
+                ).fold(new TestResult(), (res, element) ->
                         res.add(element)
                 ).map(param -> {
                     storeActor.tell(param, ActorRef.noSender());

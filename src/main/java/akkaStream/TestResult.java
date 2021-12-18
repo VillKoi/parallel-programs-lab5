@@ -5,6 +5,8 @@ public class TestResult {
         private Integer requestNumber;
         private long time;
 
+        private static final Integer startRequestNumber = 1;
+
         public String getUrl() {
             return url;
         }
@@ -27,11 +29,18 @@ public class TestResult {
             this.time = time;
         }
 
-    public TestResult(String url, long time) {
-        this.url = url;
-        this.requestNumber = 1;
-        this.time = time;
-    }
+        public TestResult(String url, long time) {
+            this.url = url;
+            this.requestNumber = startRequestNumber;
+            this.time = time;
+        }
+
+        // empty struct
+        public TestResult() {
+            this.url = "";
+            this.requestNumber = 0;
+            this.time = 0;
+        }
 
         public TestResult add(TestResult result) {
             this.url = result.url;
