@@ -55,17 +55,17 @@ public class ActorRouter {
                                     return CompletableFuture.completedFuture(result.get().getTime());
                                 }
 
-                                Sink<Pair<String, Integer>, CompletionStage<TestResult>> testSink = createFlow();
+                                Sink<Pair<String, Integer>, CompletionStage<Long>> testSink = createFlow();
                                 return Source.from(Collections.singletonList(param))
                                         .toMat(testSink, Keep.right())
                                         .run(materializer);
                             });
                 }).map(param ->
-                    HttpResponse.create().withEntity(HttpEntities.create(param.toString()));
+                    HttpResponse.create().withEntity(HttpEntities.create(param.toString()))
                 );
     }
 
-    private Sink<Pair<String, Integer>, CompletionStage<TestResult>> createFlow(){
+    private Sink<Pair<String, Integer>, CompletionStage<Long>> createFlow(){
        return Flow.<Pair<String, Integer>>create()
                 .mapConcat(pair ->
                         new ArrayList<>(Collections.nCopies(pair.second(), pair))
@@ -81,7 +81,7 @@ public class ActorRouter {
                        res.add(element)
                 ).map(param -> {
                    storeActor.tell(param, ActorRef.noSender());
-                   return param;
+                   return param.getTime();
                }).toMat(Sink.head(), Keep.right());
     }
 }
