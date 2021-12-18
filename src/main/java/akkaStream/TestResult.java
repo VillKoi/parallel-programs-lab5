@@ -14,7 +14,7 @@ public class TestResult {
         }
 
     public long getTime() {
-        return time;
+        return requestNumber / time;
     }
 
     public TestResult(String url, Integer con, long time) {
@@ -27,6 +27,7 @@ public class TestResult {
             this.url = result.url;
             this.requestNumber += result.requestNumber;
             this.time += result.time;
+            return this;
         }
 
         public boolean isReady() {
