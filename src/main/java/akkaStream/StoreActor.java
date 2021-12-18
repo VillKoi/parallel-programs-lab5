@@ -26,7 +26,7 @@ public class StoreActor extends AbstractActor {
     };
 
     private TestResult getResult(TestInformation information) {
-        long  requestTime = storage.get(information.getUrl());
+        long  requestTime = storage.getOrDefault(information.getUrl(), 0);
         TestResult result = new TestResult(information.getUrl(), information.getRequestNumber(), requestTime);
         return result;
     }
