@@ -52,7 +52,7 @@ public class ActorRouter {
                         ex.printStackTrace();
                     }
 
-                    return new Pair<>(url.toString(), requestNumber);
+                    return new Pair<>(url.get(), requestNumber);
                 })
                 .mapAsync(10, param -> {
                     TestInformation information = new TestInformation(param.first(), param.second());
@@ -84,7 +84,7 @@ public class ActorRouter {
                             client.prepareGet(param.first()).execute();
                             long endTime = System.currentTimeMillis();
 
-                            return CompletableFuture.completedFuture(new TestResult(param.first(), 0, endTime - startTime));
+                            return CompletableFuture.completedFuture(new TestResult(param.first(), 1, endTime - startTime));
                         }
                 ).fold(new TestResult("", 0, 0), (res, element) ->
                         res.add(element)
