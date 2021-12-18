@@ -14,6 +14,10 @@ public class TestResult {
         }
 
     public long getTime() {
+        return time;
+    }
+
+    public long getAvrTime() {
         return requestNumber / time;
     }
 

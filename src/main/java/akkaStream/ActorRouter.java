@@ -50,9 +50,9 @@ public class ActorRouter {
                     TestInformation information = new TestInformation(param.first(), param.second());
                     return Patterns.ask(storeActor, information, TIMEOUT_DURATION)
                             .thenCompose(response -> {
-                                Optional<TestResult> result = (Optional<TestResult>) response;
-                                if (result.isPresent()) {
-                                    return CompletableFuture.completedFuture(result.get().getTime());
+                                TestResult result = (TestResult) response;
+                                if (result.isReady()) {
+                                    return CompletableFuture.completedFuture(result.getAvrTime());
                                 }
 
                                 Sink<Pair<String, Integer>, CompletionStage<Long>> testSink = createFlow();
@@ -77,7 +77,7 @@ public class ActorRouter {
 
                             return CompletableFuture.completedFuture(new TestResult(param.first(), 0,endTime - startTime));
                         }
-                ).fold(new TestResult("", 0, 0),(res, element) ->
+                ).fold(new TestResult("", 0, 0), (res, element) ->
                        res.add(element)
                 ).map(param -> {
                    storeActor.tell(param, ActorRef.noSender());
