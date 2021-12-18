@@ -1,6 +1,7 @@
 package akkaStream;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ public class StoreActor extends AbstractActor {
         return receiveBuilder(
         ).match(
                 TestInformation.class, result -> {
-                    sender().tell(getResult(result), self());
+                    sender().tell(getResult(result), ActorRef.noSender());
                 }
         ).match(
                 TestResult.class, this::setTestResult
