@@ -27,6 +27,12 @@ public class TestResult {
             this.time = time;
         }
 
+    public TestResult(String url, long time) {
+        this.url = url;
+        this.requestNumber = 1;
+        this.time = time;
+    }
+
         public TestResult add(TestResult result) {
             this.url = result.url;
             this.requestNumber += result.requestNumber;

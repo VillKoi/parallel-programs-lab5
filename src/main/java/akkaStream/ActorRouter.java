@@ -73,6 +73,8 @@ public class ActorRouter {
                 );
     }
 
+
+
     private Sink<Pair<String, Integer>, CompletionStage<Long>> createFlow() {
         return Flow.<Pair<String, Integer>>create()
                 .mapConcat(pair ->
@@ -84,7 +86,7 @@ public class ActorRouter {
                             client.prepareGet(param.first()).execute();
                             long endTime = System.currentTimeMillis();
 
-                            return CompletableFuture.completedFuture(new TestResult(param.first(), 1, endTime - startTime));
+                            return CompletableFuture.completedFuture(new TestResult(param.first(), endTime - startTime));
                         }
                 ).fold(new TestResult("", 0, 0), (res, element) ->
                         res.add(element)
