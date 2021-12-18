@@ -34,6 +34,8 @@ public class ActorRouter {
     private static final String REQUEST_NUMBER_QUERY = "url";
 
     private final static int TIMEOUT = 5000;
+    private final static int TIMEOUT = 5000;
+
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer) {
         return Flow.of(HttpRequest.class)
