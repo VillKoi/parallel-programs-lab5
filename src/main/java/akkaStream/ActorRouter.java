@@ -78,12 +78,11 @@ public class ActorRouter {
                 .mapAsync(10, param -> {
                             long startTime = System.currentTimeMillis();
                             AsyncHttpClient client = asyncHttpClient();
-                            client.prepareGet(param.first()).execute();
-                            long endTime = System.currentTimeMillis();
-
-                            return CompletableFuture.completedFuture(new TestResult(param.first(), endTime - startTime));
-                        }
-                ).fold(new TestResult(), (res, element) ->
+                            return client.prepareGet(param.first()).execute().toCompletableFuture().thenCompose(response -> {
+                                long endTime = System.currentTimeMillis();
+                                return CompletableFuture.completedFuture(new TestResult(param.first(), endTime - startTime));
+                            });
+                }).fold(new TestResult(), (res, element) ->
                         res.add(element)
                 ).map(param -> {
                     storeActor.tell(param, ActorRef.noSender());
